@@ -41,7 +41,7 @@ export async function submitFeedback(data: FeedbackData) {
     }
 
     // 嘗試創建記錄，如果欄位不存在會自動移除並重試
-    let records;
+    let records: any;
     let retryCount = 0;
     const maxRetries = 5; // 最多重試 5 次（處理多個欄位不存在的情況）
     
@@ -73,6 +73,11 @@ export async function submitFeedback(data: FeedbackData) {
         }
         throw createError;
       }
+    }
+    
+    // 確保 records 存在
+    if (!records || records.length === 0) {
+      throw new Error("無法創建記錄");
     }
     
     return { success: true, record: records[0] };
